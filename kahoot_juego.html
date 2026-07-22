@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kahoot! - JavaScript: De Juguete a Imperio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Open+Sans:wght@400;600;700&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --red: #e21b3c;
+            --blue: #1368ce;
+            --yellow: #d89e00;
+            --green: #26890c;
+            --bg: #46178f;
+            --bg-dark: #25076b;
+            --white: #ffffff;
+            --font-title: 'Montserrat', sans-serif;
+            --font-body: 'Open Sans', sans-serif;
+            --mono: 'JetBrains Mono', monospace;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: radial-gradient(circle at center, #5b1fa8 0%, var(--bg-dark) 100%);
+            color: var(--white);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+
+        /* Container */
+        .game-container {
+            width: 100%;
+            max-width: 960px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Start Screen */
+        .start-screen {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 50px 40px;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+            border: 2px solid rgba(255,255,255,0.2);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .kahoot-logo {
+            font-family: var(--font-title);
+            font-size: 3.5rem;
+            font-weight: 900;
+            letter-spacing: -2px;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .kahoot-logo span { color: #f7df1e; }
+
+        .start-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .btn-start {
+            background: #ffffff;
+            color: var(--bg);
+            font-family: var(--font-title);
+            font-size: 1.5rem;
+            font-weight: 900;
+            padding: 16px 48px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            transition: all 0.2s ease;
+        }
+
+        .btn-start:hover {
+            transform: scale(1.05);
+            background: #f7df1e;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-family: var(--font-title);
+            font-size: 1.2rem;
+        }
+
+        .badge-q {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 18px;
+            border-radius: 30px;
+        }
+
+        .score-badge {
+            background: #f7df1e;
+            color: #000;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 900;
+        }
+
+        /* Question Box */
+        .question-card {
+            background: #ffffff;
+            color: #222222;
+            width: 100%;
+            padding: 30px 40px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 25px;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .question-text {
+            font-family: var(--font-title);
+            font-size: 1.4rem;
+            font-weight: 800;
+            line-height: 1.4;
+        }
+
+        /* Timer Bar */
+        .timer-container {
+            width: 100%;
+            height: 10px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .timer-fill {
+            height: 100%;
+            background: #f7df1e;
+            width: 100%;
+            transition: width 1s linear;
+        }
+
+        /* Answer Grid */
+        .answers-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            width: 100%;
+        }
+
+        .answer-btn {
+            border: none;
+            border-radius: 12px;
+            padding: 22px 24px;
+            font-family: var(--font-title);
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--white);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            text-align: left;
+            gap: 16px;
+            box-shadow: 0 6px 0 rgba(0,0,0,0.2);
+            transition: all 0.15s ease;
+        }
+
+        .answer-btn:hover {
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+        }
+
+        .answer-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 rgba(0,0,0,0.2);
+        }
+
+        .btn-red { background: var(--red); }
+        .btn-blue { background: var(--blue); }
+        .btn-yellow { background: var(--yellow); }
+        .btn-green { background: var(--green); }
+
+        .shape-icon {
+            font-size: 1.4rem;
+            min-width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Feedback Screen */
+        .feedback-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .feedback-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .feedback-title {
+            font-family: var(--font-title);
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+        }
+
+        .feedback-explanation {
+            font-size: 1.2rem;
+            max-width: 600px;
+            text-align: center;
+            line-height: 1.6;
+            background: rgba(255,255,255,0.1);
+            padding: 20px 30px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+        }
+
+        .btn-next {
+            background: #ffffff;
+            color: #000;
+            font-family: var(--font-title);
+            font-size: 1.3rem;
+            font-weight: 900;
+            padding: 14px 40px;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .btn-next:hover { transform: scale(1.05); }
+
+        /* End Screen */
+        .end-card {
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 24px;
+            text-align: center;
+            width: 100%;
+            max-width: 550px;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .end-score {
+            font-size: 4rem;
+            font-family: var(--font-title);
+            font-weight: 900;
+            color: #f7df1e;
+            margin: 20px 0;
+        }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+
+        <!-- START SCREEN -->
+        <div class="start-screen" id="startScreen">
+            <div class="kahoot-logo">Kahoot! <span>JS</span></div>
+            <div class="start-title">JavaScript: De Juguete a Imperio</div>
+            <p style="margin-bottom: 30px; opacity:0.8;">10 preguntas de nivel medio para poner a prueba a la clase</p>
+            <button class="btn-start" onclick="startGame()">¡EMPEZAR!</button>
+        </div>
+
+        <!-- GAMEPLAY SCREEN -->
+        <div id="gameScreen" class="hidden" style="width: 100%;">
+            <div class="top-bar">
+                <div class="badge-q" id="qBadge">Pregunta 1 / 10</div>
+                <div class="score-badge" id="scoreBadge">0 pts</div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text" id="qText">Cargando pregunta...</div>
+            </div>
+
+            <div class="timer-container">
+                <div class="timer-fill" id="timerFill"></div>
+            </div>
+
+            <div class="answers-grid">
+                <button class="answer-btn btn-red" onclick="checkAnswer(0)">
+                    <span class="shape-icon">▲</span>
+                    <span id="opt0">Opción 1</span>
+                </button>
+                <button class="answer-btn btn-blue" onclick="checkAnswer(1)">
+                    <span class="shape-icon">◆</span>
+                    <span id="opt1">Opción 2</span>
+                </button>
+                <button class="answer-btn btn-yellow" onclick="checkAnswer(2)">
+                    <span class="shape-icon">●</span>
+                    <span id="opt2">Opción 3</span>
+                </button>
+                <button class="answer-btn btn-green" onclick="checkAnswer(3)">
+                    <span class="shape-icon">■</span>
+                    <span id="opt3">Opción 4</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- END SCREEN -->
+        <div id="endScreen" class="end-card hidden">
+            <div class="kahoot-logo">¡FIN DEL JUEGO!</div>
+            <p style="font-size: 1.2rem;">Puntuación Final:</p>
+            <div class="end-score" id="finalScore">0</div>
+            <p id="finalMsg" style="margin-bottom: 30px; font-size:1.1rem; opacity:0.9;"></p>
+            <button class="btn-start" onclick="startGame()">JUGAR DE NUEVO</button>
+        </div>
+
+    </div>
+
+    <!-- FEEDBACK MODAL -->
+    <div class="feedback-modal" id="feedbackModal">
+        <div class="feedback-title" id="fbTitle">¡Correcto! 🎉</div>
+        <div class="feedback-explanation" id="fbExp">Explicación aquí</div>
+        <button class="btn-next" onclick="nextQuestion()">Siguiente ▶</button>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                q: "¿En cuántos días creó Brendan Eich la primera versión de JavaScript en 1995?",
+                opts: ["30 días", "10 días", "1 año", "100 días"],
+                correct: 1,
+                exp: "💡 Brendan Eich creó la primera versión de JavaScript (llamada originalmente Mocha) en solo 10 días para Netscape en mayo de 1995."
+            },
+            {
+                q: "¿Por qué el lenguaje se llamó 'JavaScript' si no tiene relación con Java?",
+                opts: ["Creadores iguales", "Copia de código", "Estrategia de marketing", "Error de imprenta"],
+                correct: 2,
+                exp: "💡 Fue puramente marketing en 1995 para aprovechar la fama de Java. Tienen tanto en común como 'car' y 'carpet'."
+            },
+            {
+                q: "¿Cómo funciona JavaScript para ejecutar código siendo Single-Threaded (un solo hilo)?",
+                opts: ["Crea miles de hilos", "Hace una cosa a la vez pero delega tareas lentas", "Se congela totalmente", "Duplica la memoria RAM"],
+                correct: 1,
+                exp: "💡 Como un chef en una estufa: pone el agua a hervir (delega al navegador) y mientras tanto pica verduras."
+            },
+            {
+                q: "En este código: console.log('A'); setTimeout(()=>console.log('B'),0); console.log('C'); ¿En qué orden sale?",
+                opts: ["A, B, C", "A, C, B", "B, A, C", "C, B, A"],
+                correct: 1,
+                exp: "💡 setTimeout delega la tarea a la cola. El Event Loop procesa primero todo el código síncrono (A y C) y al final B."
+            },
+            {
+                q: "¿Qué es el DOM en el contexto del desarrollo web?",
+                opts: ["El servidor de la BD", "Sustituto de HTML", "La representación en memoria modificable por JS", "Motor gráfico de Chrome"],
+                correct: 2,
+                exp: "💡 El DOM (Document Object Model) es el árbol de objetos en memoria que JS modifica en tiempo real para cambiar la página."
+            },
+            {
+                q: "¿Qué hace la palabra clave 'await' en: const res = await fetch(url)?",
+                opts: ["Congela la compu", "Cancela la petición", "Espera la respuesta sin congelar la página", "Traduce a C++"],
+                correct: 2,
+                exp: "💡 'await' espera los datos del servidor de forma asíncrona sin bloquear la interfaz ni la experiencia del usuario."
+            },
+            {
+                q: "¿Qué logro principal tuvo Node.js al salir en 2009?",
+                opts: ["Sitios 100% gratis", "Ejecutar JS en servidores fuera del navegador", "Reemplazar HTML y CSS", "Eliminar las BD"],
+                correct: 1,
+                exp: "💡 Ryan Dahl tomó el motor V8 de Chrome y creó Node.js, permitiendo usar JavaScript en servidores por primera vez."
+            },
+            {
+                q: "¿Por qué muchos desarrolladores prefieren TypeScript en lugar de JavaScript puro?",
+                opts: ["Corre 100x más rápido", "Detecta errores en el editor ANTES de ejecutar", "No requiere aprender JS", "Elimina las pruebas"],
+                correct: 1,
+                exp: "💡 TypeScript agrega tipos estáticos que te marcan errores en rojo en tu editor antes de publicar el código a producción."
+            },
+            {
+                q: "En JavaScript ¿cuál es el resultado de ejecutar typeof null?",
+                opts: ["'null'", "'undefined'", "'object'", "'number'"],
+                correct: 2,
+                exp: "💡 ¡Un bug histórico de 1995! 'null' tenía el tag de bits 000 igual que los objetos, y se mantuvo por retrocompatibilidad."
+            },
+            {
+                q: "¿Qué tecnología permite ejecutar modelos de IA localmente usando la GPU en el navegador?",
+                opts: ["Node.js", "WebGPU + Transformers.js", "jQuery", "AJAX"],
+                correct: 1,
+                exp: "💡 WebGPU da acceso a la tarjeta gráfica directamente desde JS para correr inteligencia artificial localmente sin servidor."
+            }
+        ];
+
+        let currentQ = 0;
+        let score = 0;
+        let timer = null;
+        let timeLeft = 20;
+
+        function startGame() {
+            currentQ = 0;
+            score = 0;
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('endScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.remove('hidden');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const q = questions[currentQ];
+            document.getElementById('qBadge').textContent = `Pregunta ${currentQ + 1} / ${questions.length}`;
+            document.getElementById('scoreBadge').textContent = `${score} pts`;
+            document.getElementById('qText').textContent = q.q;
+
+            for (let i = 0; i < 4; i++) {
+                document.getElementById(`opt${i}`).textContent = q.opts[i];
+            }
+
+            // Reset Timer
+            timeLeft = 20;
+            const timerFill = document.getElementById('timerFill');
+            timerFill.style.transition = 'none';
+            timerFill.style.width = '100%';
+
+            setTimeout(() => {
+                timerFill.style.transition = 'width 20s linear';
+                timerFill.style.width = '0%';
+            }, 50);
+
+            clearInterval(timer);
+            timer = setTimeout(() => {
+                checkAnswer(-1); // Time out
+            }, 20000);
+        }
+
+        function checkAnswer(selected) {
+            clearInterval(timer);
+            const q = questions[currentQ];
+            const isCorrect = selected === q.correct;
+
+            const modal = document.getElementById('feedbackModal');
+            const fbTitle = document.getElementById('fbTitle');
+            const fbExp = document.getElementById('fbExp');
+
+            if (isCorrect) {
+                score += 1000;
+                fbTitle.textContent = "¡CORRECTO! 🎉";
+                fbTitle.style.color = "#3fb950";
+            } else if (selected === -1) {
+                fbTitle.textContent = "¡TIEMPO AGOTADO! ⏰";
+                fbTitle.style.color = "#f0883e";
+            } else {
+                fbTitle.textContent = "¡INCORRECTO! ❌";
+                fbTitle.style.color = "#f85149";
+            }
+
+            fbExp.textContent = q.exp;
+            modal.classList.add('active');
+        }
+
+        function nextQuestion() {
+            document.getElementById('feedbackModal').classList.remove('active');
+            currentQ++;
+            if (currentQ < questions.length) {
+                loadQuestion();
+            } else {
+                showEndScreen();
+            }
+        }
+
+        function showEndScreen() {
+            document.getElementById('gameScreen').classList.add('hidden');
+            document.getElementById('endScreen').classList.remove('hidden');
+            document.getElementById('finalScore').textContent = `${score} pts`;
+
+            let msg = "";
+            if (score >= 9000) msg = "🏆 ¡Excelente! Dominas JavaScript a nivel senior.";
+            else if (score >= 6000) msg = "👏 ¡Muy bien! Tienes bases sólidas del lenguaje.";
+            else msg = "📚 ¡Buen intento! Repasa la presentación para el examen.";
+            document.getElementById('finalMsg').textContent = msg;
+        }
+    </script>
+</body>
+</html>
