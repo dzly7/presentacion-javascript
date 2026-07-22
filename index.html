@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript: De Juguete a Imperio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #0d1117;
+            --bg-card: #161b22;
+            --bg-code: #1a1e26;
+            --text: #e6edf3;
+            --text-dim: #8b949e;
+            --accent: #f7df1e;
+            --cyan: #58a6ff;
+            --green: #3fb950;
+            --red: #f85149;
+            --purple: #bc8cff;
+            --orange: #f0883e;
+            --font: 'Inter', sans-serif;
+            --mono: 'JetBrains Mono', monospace;
+        }
+
+        html, body {
+            width: 100%; height: 100%;
+            overflow: hidden;
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font);
+        }
+
+        .presentation { width: 100%; height: 100%; position: relative; }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 50px 80px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(40px);
+            transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s 0.5s;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+            transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s;
+        }
+
+        .slide.prev { transform: translateX(-40px); }
+
+        h1 { font-size: clamp(2rem, 4.5vw, 3.6rem); font-weight: 900; line-height: 1.1; letter-spacing: -0.03em; }
+        h2 { font-size: clamp(1.5rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; }
+        h3 { font-size: clamp(1.05rem, 1.8vw, 1.4rem); font-weight: 600; line-height: 1.3; }
+        p, li { font-size: clamp(0.9rem, 1.3vw, 1.15rem); line-height: 1.7; color: var(--text-dim); }
+
+        .accent { color: var(--accent); }
+        .cyan { color: var(--cyan); }
+        .green { color: var(--green); }
+        .red { color: var(--red); }
+        .purple { color: var(--purple); }
+        .orange { color: var(--orange); }
+        .dim { color: var(--text-dim); }
+        .bold { font-weight: 700; color: var(--text); }
+        .big-emoji { font-size: 2.5rem; }
+
+        .slide-content { width: 100%; max-width: 1100px; }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .three-col {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .four-col {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        pre {
+            background: var(--bg-code);
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 20px 24px;
+            overflow-x: auto;
+            font-family: var(--mono);
+            font-size: clamp(0.72rem, 1vw, 0.88rem);
+            line-height: 1.65;
+            color: var(--text);
+            position: relative;
+        }
+
+        pre .label {
+            position: absolute;
+            top: 8px; right: 12px;
+            font-size: 0.65rem;
+            color: var(--text-dim);
+            background: var(--bg);
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .kw { color: var(--purple); }
+        .fn { color: var(--cyan); }
+        .str { color: #a5d6ff; }
+        .num { color: var(--orange); }
+        .cmt { color: #6e7681; font-style: italic; }
+        .op { color: var(--red); }
+
+        code {
+            font-family: var(--mono);
+            background: var(--bg-code);
+            padding: 2px 7px;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid #30363d;
+            border-radius: 14px;
+            padding: 24px 28px;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+        }
+
+        .card h3 { margin-bottom: 8px; }
+
+        .stat-card {
+            text-align: center;
+            padding: 28px 20px;
+        }
+
+        .stat-card .big {
+            font-size: clamp(1.8rem, 3.5vw, 3rem);
+            font-weight: 900;
+            color: var(--accent);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .stat-card p { font-size: 0.85rem; }
+
+        .icon-card {
+            text-align: center;
+            padding: 20px 16px;
+        }
+
+        .icon-card .icon {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        .icon-card h3 { font-size: 0.95rem; }
+        .icon-card p { font-size: 0.78rem; }
+
+        .timeline {
+            display: flex;
+            align-items: flex-start;
+            position: relative;
+            margin: 30px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 18px;
+            left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--cyan), var(--green));
+        }
+
+        .timeline-item {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            padding-top: 40px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            top: 12px; left: 50%;
+            transform: translateX(-50%);
+            width: 14px; height: 14px;
+            background: var(--accent);
+            border-radius: 50%;
+            border: 3px solid var(--bg);
+            z-index: 1;
+        }
+
+        .timeline-item .year {
+            font-family: var(--mono);
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--accent);
+        }
+
+        .timeline-item p { font-size: 0.78rem; margin-top: 4px; }
+
+        .box {
+            background: var(--bg-card);
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 14px 22px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .box.highlight {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(247, 223, 30, 0.1);
+        }
+
+        .arrow { font-size: 1.5rem; color: var(--accent); text-align: center; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #21262d;
+        }
+
+        th {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        td { color: var(--text-dim); }
+
+        .progress-bar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--cyan));
+            transition: width 0.4s ease;
+            z-index: 100;
+        }
+
+        .nav {
+            position: fixed;
+            bottom: 28px; right: 32px;
+            display: flex;
+            gap: 10px;
+            z-index: 99;
+        }
+
+        .nav button {
+            width: 44px; height: 44px;
+            border-radius: 12px;
+            border: 1px solid #30363d;
+            background: var(--bg-card);
+            color: var(--text);
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav button:hover {
+            background: var(--accent);
+            color: var(--bg);
+            border-color: var(--accent);
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 34px; left: 32px;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            z-index: 99;
+        }
+
+        ul { list-style: none; padding: 0; }
+        ul li { padding: 6px 0; position: relative; padding-left: 20px; }
+        ul li::before { content: '▸'; position: absolute; left: 0; color: var(--accent); font-weight: bold; }
+
+        .mt-1 { margin-top: 12px; }
+        .mt-2 { margin-top: 24px; }
+        .mt-3 { margin-top: 36px; }
+        .mb-1 { margin-bottom: 12px; }
+        .mb-2 { margin-bottom: 24px; }
+
+        .title-slide { text-align: center; }
+
+        .js-logo {
+            width: 90px; height: 90px;
+            background: var(--accent);
+            border-radius: 16px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-end;
+            padding: 10px 14px;
+            font-family: var(--mono);
+            font-weight: 900;
+            font-size: 2.2rem;
+            color: var(--bg);
+            margin: 0 auto 30px;
+            box-shadow: 0 0 60px rgba(247, 223, 30, 0.2);
+        }
+
+        .subtitle {
+            font-size: clamp(1rem, 1.5vw, 1.3rem);
+            color: var(--text-dim);
+            font-weight: 300;
+            margin-top: 12px;
+        }
+
+        .team-info {
+            margin-top: 40px;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            font-weight: 300;
+        }
+
+        .quote {
+            font-size: clamp(1.3rem, 2.5vw, 2rem);
+            font-style: italic;
+            font-weight: 300;
+            color: var(--text);
+            text-align: center;
+            max-width: 800px;
+            line-height: 1.5;
+        }
+
+        .fade-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .slide.active .fade-up { opacity: 1; transform: translateY(0); }
+        .slide.active .fade-up:nth-child(2) { transition-delay: 0.1s; }
+        .slide.active .fade-up:nth-child(3) { transition-delay: 0.2s; }
+        .slide.active .fade-up:nth-child(4) { transition-delay: 0.3s; }
+        .slide.active .fade-up:nth-child(5) { transition-delay: 0.4s; }
+
+        .analogy-box {
+            background: linear-gradient(135deg, rgba(247,223,30,0.08), rgba(88,166,255,0.08));
+            border: 1px solid rgba(247,223,30,0.2);
+            border-radius: 14px;
+            padding: 20px 24px;
+            text-align: center;
+        }
+
+        .analogy-box .emoji { font-size: 2rem; margin-bottom: 8px; }
+
+        .vs-label {
+            text-align: center;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-dim);
+            margin-bottom: 10px;
+        }
+
+        .vs-bad { border-left: 3px solid var(--red); }
+        .vs-good { border-left: 3px solid var(--green); }
+
+        .reason-item {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            padding: 14px 0;
+            border-bottom: 1px solid #21262d;
+        }
+
+        .reason-num {
+            font-family: var(--mono);
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: var(--accent);
+            min-width: 40px;
+        }
+
+        .reason-item h3 { font-size: 1rem; margin-bottom: 2px; }
+        .reason-item p { font-size: 0.85rem; margin: 0; }
+
+        .key-hint {
+            position: fixed;
+            bottom: 34px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            color: #484f58;
+            font-family: var(--mono);
+            z-index: 99;
+        }
+
+        .key-hint kbd {
+            background: #21262d;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            border: 1px solid #30363d;
+        }
+
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .app-item {
+            background: var(--bg-card);
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .app-item:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent);
+        }
+
+        .app-item .app-icon { font-size: 1.8rem; margin-bottom: 6px; }
+        .app-item .app-name { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+        .app-item .app-desc { font-size: 0.7rem; color: var(--text-dim); margin-top: 2px; }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progress"></div>
+
+    <div class="presentation" id="presentation">
+
+        <!-- ═══════════ SLIDE 0: PORTADA ═══════════ -->
+        <div class="slide active">
+            <div class="slide-content title-slide">
+                <div class="js-logo fade-up">JS</div>
+                <h1 class="fade-up">De Juguete a <span class="accent">Imperio</span></h1>
+                <p class="subtitle fade-up">Cómo un lenguaje creado en 10 días conquistó el mundo</p>
+                <p class="team-info fade-up">Ingeniería en TI · 2026</p>
+            </div>
+        </div>
+
+        <!-- ═══════════ SLIDE 1: ¿QUÉ ES JS? ═══════════ -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2 class="fade-up mb-2">¿Qué es <span class="accent">JavaScript</span>?</h2>
+                <div class="two-col">
+                    <div class="fade-up">
+                        <p style="color:var(--text); font-size:1.05rem; line-height:1.8;">
+                            Es el <span class="bold">lenguaje de programación de la web</span>. Todo lo interactivo que ves en un sitio web — menús que se despliegan, formularios que se validan, notificaciones, animaciones, chats en tiempo real — es JavaScript trabajando detrás de escena.
+                        </p>
+                        <div class="analogy-box mt-2">
+                            <div class="emoji">🏗️</div>
+                            <p style="color:var(--text); font-size:0.9rem;">
+                                Si una página web fuera una <span class="bold">casa</span>:<br>
+                                <span class="cyan">HTML</span> = la estructura (paredes, techo)<br>
+                                <span class="purple">CSS</span> = la decoración (pintura, muebles)<br>
+                                <span class="accent">JavaScript</span> = la electricidad y plomería<br>
+                                <span class="dim">(lo que hace que todo funcione)</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="fade-up">
+                        <pre><span class="cmt">// Ejemplo: un botón que saluda</span>
+
+<span class="kw">const</span> boton = document.<span class="fn">querySelector</span>(<span class="str">'#saludar'</span>);
+
+boton.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, () <span class="op">=></span> {
+  <span class="fn">alert</span>(<span class="str">'¡Hola! 👋 Esto es JavaScript'</span>);
+});
+
+<span class="cmt">// Con solo estas 3 líneas, un botón</span>
+<span class="cmt">// de tu página ya es interactivo</span><span class="label">mi primer código js</span></pre>
+                        <div class="card mt-2" style="border-color:var(--green); padding:16px 20px;">
+                            <p style="font-size:0.85rem;">✅ Es el <span class="bold">único lenguaje</span> que los navegadores entienden de forma nativa</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════ SLIDE 2: ORIGEN ═══════════ -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2 class="fade-up mb-2">La historia: de <span class="accent">10 días</span> a dominar el mundo</h2>
+                <div class="fade-up">
+                    <div class="two-col mb-2">
+                        <div>
+                            <ul>
+                                <li><span class="bold">1995</span> — Brendan Eich lo crea en <span class="accent">10 días</span> para Netscape</li>
+                                <li>Nombre original: <span class="accent">Mocha</span> → LiveScript → JavaScript</li>
+                                <li>"JavaScript" fue un nombre de <span class="bold">marketing</span> — no tiene relación con Java</li>
+                                <li>Al inicio era visto como un <span class="dim">"lenguaje de juguete"</span></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <ul>
+                                <li><span class="bold">2005</span> — Gmail demuestra que JS puede crear <span class="green">apps reales</span></li>
+                                <li><span class="bold">2009</span> — Node.js lo lleva a los <span class="cyan">servidores</span></li>
+                                <li><span class="bold">2015</span> — ES6: la gran modernización</li>
+                                <li><span class="bold">Hoy</span> — El lenguaje <span class="accent">más usado del mundo</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline fade-up">
+                    <div class="timeline-item"><div class="year">1995</div><p>"Juguete"<br>de navegador</p></div>
+                    <div class="timeline-item"><div class="year">2005</div><p>Gmail prueba<br>que JS es serio</p></div>
+                    <div class="timeline-item"><div class="year">2009</div><p>Sale del<br>navegador</p></div>
+                    <div class="timeline-item"><div class="year">2015</div><p>Se moderniza<br>por completo</p></div>
+                    <div class="timeline-item"><div class="year">Hoy</div><p>Domina<br>todo</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════ SLIDE 3: DÓNDE ESTÁ JS ═══════════ -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2 class="fade-up mb-2">Apps que usas <span class="accent">todos los días</span> hechas con JS</h2>
+                <div class="app-grid fade-up">
+                    <div class="app-item">
+                        <div class="app-icon">💬</div>
+                        <div class="app-name">WhatsApp Web</div>
+                        <div class="app-desc">Interfaz completa en JS</div>
+                    </div>
+                    <div class="app-item">
+                        <div class="app-icon">📺</div>
+                        <div class="app-name">Netflix</div>
+                        <div class="app-desc">Toda su UI en React</div>
+                    </div>
+                    <div class="app-item">
+                        <div class="app-icon">📸</div>
+                        <div class="app-name">Instagram</div>
+                        <div class="app-desc">Web + app con React Native</div>
+                    </div>
+                    <div class="app-item">
+                        <div class="app-icon">🎵</div>
+                        <div class="app-name">Spotify</div>
+                        <div class="app-desc">App de escritorio con JS</div>
+                    </div>
+                    <div class="app-item">
+                        <div class="app-icon">💻</div>
+                        <div class="app-name">VS Code</div>
+                        <div class="app-desc">Editor hecho con Electron</div>
+                    </div>
+                    <div class="app-item">
+                        <div class="app-icon">🎮</div>
+                        <div class="app-name">Discord</div>
+                        <div class="app-desc">Chat con React + Electron</div>
+                    </div>
+                    <div class="app-item">
+                        <div class="app-icon">💳</div>
+                        <div class="app-name">PayPal</div>
+                        <div class="app-desc">Backend con Node.js</div>
+                    </div>
+                    <div class="app-item">
+                        <div class="app-icon">🚀</div>
+                        <div class="app-name">SpaceX</div>
+                        <div class="app-desc">Pantallas del cohete Dragon</div>
+                    </div>
+                </div>
+                <div class="three-col mt-3 fade-up">
+                    <div class="card stat-card">
+                        <div class="big">#1</div>
+                        <p>Lenguaje más popular<br>12 años seguidos</p>
+                    </div>
+                    <div class="card stat-card">
+                        <div class="big">98.8%</div>
+                        <p>de los sitios web<br>usan JavaScript</p>
+                    </div>
+                    <div class="card stat-card">
+                        <div class="big">2.5M</div>
+                        <p>paquetes disponibles<br>para instalar gratis</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════ SLIDE 4: CÓMO FUNCIONA (simple) ═══════════ -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2 class="fade-up mb-2">¿Cómo funciona <span class="accent">por dentro</span>?</h2>
+                <div class="two-col">
+                    <div class="fade-up">
+                        <div class="analogy-box mb-2">
+                            <div class="emoji">🍳</div>
+                            <p style="color:var(--text); font-size:0.9rem;">
+                                Imaginen a un <span class="bold">chef en una cocina</span>:<br><br>
+                                Tiene <span class="accent">una sola estufa</span> (un solo hilo)<br>
+                                Pero puede poner agua a hervir y<br>
+                                mientras tanto cortar verduras<br><br>
+                                <span class="dim">Así funciona JavaScript: hace una cosa a la vez,<br>
+                                pero no se queda esperando. Delega y sigue.</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="fade-up">
+                        <h3 class="mb-1">El motor V8</h3>
+                        <p style="font-size:0.9rem;">Cuando escribes JavaScript, el navegador lo convierte en instrucciones que la computadora entiende:</p>
+                        <div style="display:flex; flex-direction:column; gap:8px; margin-top:14px;">
+                            <div class="box">📝 Tu código JavaScript</div>
+                            <div class="arrow">↓</div>
+                            <div class="box"><span class="cyan">Motor V8</span> (lo traduce)</div>
+                            <div class="arrow">↓</div>
+                            <div class="box highlight">⚡ Código que la computadora ejecuta</div>
+                        </div>
+                        <p class="mt-1 dim" style="font-size:0.78rem;">V8 es el motor de Chrome y Node.js, creado por Google. Es tan rápido que JavaScript puede competir con lenguajes como C++.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════ SLIDE 5: CALL STACK + EVENT LOOP (simple) ═══════════ -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2 class="fade-up mb-2">El <span class="accent">Event Loop</span>: cómo hace varias cosas a la vez</h2>
+                <div class="two-col">
+                    <div class="fade-up">
+                        <h3 class="mb-1">La pila de tareas <span class="dim">(Call Stack)</span></h3>
+                        <p style="font-size:0.88rem;">JavaScript ejecuta las tareas una por una, como una <span class="bold">pila de platos</span>: el último plato que pones es el primero que lavas.</p>
+
+                        <h3 class="mt-2 mb-1">Pero... ¿y las tareas lentas?</h3>
+                        <p style="font-size:0.88rem;">Cuando algo tarda (cargar datos, un temporizador), JS lo <span class="bold">delega al navegador</span> y sigue trabajando. Cuando termina, el resultado vuelve a la fila.</p>
+
+                        <div class="card mt-2" style="border-color:var(--accent); padding:16px;">
+                            <p style="font-size:0.85rem;">🔁 El <span class="accent">Event Loop</span> es el mecanismo que revisa: <em>"¿Ya terminaste? Ok, te paso al frente."</em></p>
+                        </div>
+                    </div>
+                    <div class="fade-up">
+                        <pre><span class="cmt">// Veamos cómo funciona:</span>
+
+<span class="kw">console</span>.<span class="fn">log</span>(<span class="str">'1. Primero'</span>);
+
+<span class="fn">setTimeout</span>(() <span class="op">=></span> {
+  <span class="kw">console</span>.<span class="fn">log</span>(<span class="str">'2. Después de 2 seg'</span>);
+}, <span class="num">2000</span>);
+
+<span class="kw">console</span>.<span class="fn">log</span>(<span class="str">'3. ¡Pero yo salgo antes!'</span>);
+
+<span class="cmt">// Resultado:</span>
+<span class="cmt">// 1. Primero</span>
+<span class="cmt">// 3. ¡Pero yo salgo antes!</span>
+<span class="cmt">// 2. Después de 2 seg  (espera su turno)</span>
+
+<span class="cmt">// JS no se "congela" esperando</span>
+<span class="cmt">// los 2 segundos. Sigue trabajando</span>
+<span class="cmt">// y cuando el timer termina,</span>
+<span class="cmt">// el resultado entra por el Event Loop</span><span class="label">pruébalo en consola</span></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════ SLIDE 6: EL DOM ═══════════ -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2 class="fade-up mb-2">El <span class="accent">DOM</span>: así JavaScript controla lo que ves</h2>
+                <div class="two-col">
+                    <div class="fade-up">
+                        <p style="font-size:0.95rem; color:var(--text);">El DOM es la <span class="bold">representación viva</span> de la página en memoria. JavaScript puede leer, cambiar, crear y eliminar cualquier elemento.</p>
+                        <pre class="mt-2"><span class="cmt">// Cambiar el color de un título</span>
+<span class="kw">const</span> titulo = document.<span class="fn">querySelector</span>(<span class="str">'h1'</span>);
+titulo.style.color = <span class="str">'#F7DF1E'</span>;
+
+<span class="cmt">// Cambiar el texto</span>
+titulo.textContent = <span class="str">'¡Modificado con JS!'</span>;
+
+<span class="cmt">// Crear un elemento nuevo</span>
+<span class="kw">const</span> parrafo = document.<span class="fn">createElement</span>(<span class="str">'p'</span>);
+parrafo.textContent = <span class="str">'Yo no existía en el HTML 👻'</span>;
+document.body.<span class="fn">appendChild</span>(parrafo);<span class="label">dom</span></pre>
+                    </div>
+                    <div class="fade-up">
+                        <h3 class="mb-1">Los eventos: reaccionar al usuario</h3>
+                        <p style="font-size:0.88rem;" class="mb-2">Cada acción del usuario (click, tecla, scroll) genera un <span class="bold">evento</span> que JavaScript puede escuchar.</p>
+                        <pre><span class="cmt">// Escuchar un click</span>
+boton.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, () <span class="op">=></span> {
+  <span class="fn">alert</span>(<span class="str">'¡Hiciste click!'</span>);
+});
+
+<span class="cmt">// Escuchar el teclado</span>
+document.<span class="fn">addEventListener</span>(<span class="str">'keydown'</span>, (e) <span class="op">=></span> {
+  <span class="kw">console</span>.<span class="fn">log</span>(<span class="str">`Presionaste: ${</span>e.key<span class="str">}`</span>);
+});
+
+<span class="cmt">// Así funcionan los formularios,</span>
+<span class="cmt">// menús, juegos, y toda la</span>
+<span class="cmt">// interactividad de la web</span><span class="label">eventos</span></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════ SLIDE 7: ASYNC/AWAIT ═══════════ -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2 class="fade-up mb-2">Traer datos de internet con <span class="accent">Async/Await</span></h2>
+                <div class="two-col">
+                    <div class="fade-up">
+                        <p style="font-size:0.92rem; color:var(--text);" class="mb-2">Cuando una app necesita datos de un servidor (tu feed de Instagram, resultados de búsqueda, etc.), JavaScript los pide <span class="bold">sin congelar la página</span>.</p>
+                        <div class="analogy-box">
+                            <div class="emoji">📱</div>
+                            <p style="color:var(--text); font-size:0.88rem;">
+                                Es como pedir comida por app:<br>
+                                <span class="accent">Haces el pedido</span> → sigues con tu vida →<br>
+                                <span class="green">te avisan cuando llega</span><br><br>
+                                <span class="dim">No te quedas parado en la puerta esperando.</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="fade-up">
+                        <pre><span class="cmt">// Ejemplo real: traer datos de GitHub</span>
+
+<span class="kw">async function</span> <span class="fn">buscarUsuario</span>(nombre) {
+  <span class="cmt">// "await" = espera el resultado</span>
+  <span class="cmt">// pero NO congela la página</span>
+  <span class="kw">const</span> respuesta = <span class="kw">await</span> <span class="fn">fetch</span>(
+    <span class="str">`https://api.github.com/users/${</span>nombre<span class="str">}`</span>
+  );
+
+  <span class="kw">const</span> datos = <span class="kw">await</span> respuesta.<span class="fn">json</span>();
+
+  <span class="kw">console</span>.<span class="fn">log</span>(datos.name);
+  <span class="kw">console</span>.<span class="fn">log</span>(datos.public_repos + <span class="str">' repos'</span>);
+}
+
+<span class="fn">buscarUsuario</span>(<span class="str">'torvalds'</span>);
+<span class="cmt">// → "Linus Torvalds"</span>
+<span class="cmt">// → "7 repos"</span><span class="label">fetch api</span></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════ SLIDE 8: NODE.JS ═══════════ -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2 class="fade-up mb-2">JavaScript fuera del navegador: <span class="accent">Node.js</span></h2>
+                <div class="two-col">
+                    <div class="fade-up">
+                        <p style="font-size:0.95rem; color:var(--text);">En 2009, <span class="bold">Node.js</span> tomó el motor V8 de Chrome y lo puso a funcionar en servidores. Ahora con un solo lenguaje puedes hacer <span class="accent">todo</span>:</p>
+                        <div class="four-col mt-2">
+                            <div class="card icon-card">
+                                <div class="icon">🌐</div>
+                                <h3>Frontend</h3>
+                                <p>La página web</p>
+                            </div>
+                            <div class="card icon-card">
+                                <div class="icon">🖥️</div>
+                                <h3>Backend</h3>
+                                <p>El servidor</p>
+                            </div>
+                            <div class="card icon-card">
+                                <div class="icon">📱</div>
+                                <h3>Mobile</h3>
+                                <p>Apps iOS/Android</p>
+                            </div>
+                            <div class="card icon-card">
+                                <div class="icon">🖥️</div>
+                                <h3>Desktop</h3>
+                                <p>Apps de PC</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fade-up">
+                        <pre><span class="cmt">// Crear un servidor web en 10 líneas</span>
+
+<span class="kw">import</span> { createServer } <span class="kw">from</span> <span class="str">'node:http'</span>;
+
+<span class="kw">const</span> server = <span class="fn">createServer</span>((req, res) <span class="op">=></span> {
+  res.<span class="fn">writeHead</span>(<span class="num">200</span>, {
+    <span class="str">'Content-Type'</span>: <span class="str">'application/json'</span>
+  });
+  res.<span class="fn">end</span>(<span class="kw">JSON</span>.<span class="fn">stringify</span>({
+    mensaje: <span class="str">'¡Hola desde mi servidor!'</span>,
+    hora: <span class="kw">new</span> <span class="fn">Date</span>().<span class="fn">toLocaleTimeString</span>()
+  }));
+});
+
+server.<span class="fn">listen</span>(<span class="num">3000</span>);
+<span class="cmt">// ¡Tu propio servidor funcionando!</span><span class="label">server.js</span></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════ SLIDE 9: RUNTIMES ═══════════ -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2 class="fade-up mb-2">Node.js ya no está solo: la <span class="accent">competencia</span></h2>
+                <div class="fade-up">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th><span class="accent">Node.js</span></th>
+                                <th><span class="cyan">Deno</span></th>
+                                <th><span class="orange">Bun</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="bold">Año</td>
+                                <td>2009</td>
+                                <td>2020</td>
+                                <td>2022</td>
+                            </tr>
+                            <tr>
+                                <td class="bold">Creador</td>
+                                <td>Ryan Dahl</td>
+                                <td>Ryan Dahl <span class="dim">(sí, el mismo)</span></td>
+                                <td>Jarred Sumner</td>
+                            </tr>
+                            <tr>
+                                <td class="bold">¿Por qué existe?</td>
+                                <td>El original, el más maduro</td>
+                                <td>"Arreglar los errores de Node"</td>
+                                <td>Velocidad extrema</td>
+                            </tr>
+                            <tr>
+                                <td class="bold">TypeScript</td>
+                                <td>Necesita configuración</td>
+                                <td style="color:var(--green);">Funciona directo ✅</td>
+                                <td style="color:var(--green);">Funciona directo ✅</td>
+                            </tr>
+                            <tr>
+                                <td class="bold">Velocidad</td>
+                                <td>⭐⭐⭐</td>
+                                <td>⭐⭐⭐</td>
+                                <td style="color:var(--accent);">⭐⭐⭐⭐⭐</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card mt-2 fade-up" style="border-color: var(--green); text-align:center; padding:16px;">
+                    <p style="font-size:0.9rem;">Los tres ejecutan <span class="bold">el mismo lenguaje</span>. La competencia beneficia a todos los desarrolladores 🤝</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════ SLIDE 10: TYPESCRIPT ═══════════ -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2 class="fade-up mb-2"><span class="accent">TypeScript</span>: JavaScript que te avisa antes de equivocarte</h2>
+                <div class="two-col">
+                    <div class="fade-up">
+                        <div class="vs-label"><span class="red">❌ JavaScript: el error aparece AL EJECUTAR</span></div>
+                        <pre class="vs-bad"><span class="kw">function</span> <span class="fn">saludar</span>(usuario) {
+  <span class="kw">return</span> <span class="str">'Hola, '</span> + usuario.nombre;
+}
+
+<span class="cmt">// Nos equivocamos y pasamos un número</span>
+<span class="fn">saludar</span>(<span class="num">42</span>);
+<span class="cmt">// 💥 Error en producción:</span>
+<span class="cmt">// "Cannot read property 'nombre'"</span>
+<span class="cmt">// El usuario ya vio el error 😱</span></pre>
+                    </div>
+                    <div class="fade-up">
+                        <div class="vs-label"><span class="green">✅ TypeScript: el error aparece MIENTRAS ESCRIBES</span></div>
+                        <pre class="vs-good"><span class="kw">type</span> Usuario = {
+  nombre: <span class="cyan">string</span>;
+  edad: <span class="cyan">number</span>;
+};
+
+<span class="kw">function</span> <span class="fn">saludar</span>(usuario: Usuario) {
+  <span class="kw">return</span> <span class="str">'Hola, '</span> + usuario.nombre;
+}
+
+<span class="fn">saludar</span>(<span class="num">42</span>);
+<span class="cmt">// ❌ Tu editor te marca el error</span>
+<span class="cmt">// ANTES de ejecutar el código</span>
+<span class="cmt">// "Se esperaba un Usuario, no un número"</span></pre>
+                    </div>
+                </div>
+                <p class="mt-1 fade-up dim" style="text-align:center; font-size:0.85rem;">TypeScript se convierte a JavaScript puro → funciona en todos lados. Hoy lo usa el <span class="bold">78%</span> de los desarrolladores profesionales.</p>
+            </div>
+        </div>
+
+        <!-- ═══════════ SLIDE 11: FRAMEWORKS ═══════════ -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2 class="fade-up mb-2">Herramientas modernas: <span class="accent">frameworks</span></h2>
+                <p class="fade-up dim mb-2" style="text-align:center;">En vez de escribir todo desde cero, los frameworks nos dan componentes y estructuras listas para usar.</p>
+                <div class="four-col fade-up">
+                    <div class="card icon-card">
+                        <div class="icon">⚛️</div>
+                        <h3><span class="cyan">React</span></h3>
+                        <p>Creado por Meta (Facebook). El más popular. Usado en Instagram, WhatsApp Web, Netflix.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="icon">💚</div>
+                        <h3><span class="green">Vue</span></h3>
+                        <p>Fácil de aprender. Ideal para empezar. Usado en Alibaba y GitLab.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="icon">🔶</div>
+                        <h3><span class="orange">Svelte</span></h3>
+                        <p>Ultra ligero. Compila tu código a JS puro sin "extras" innecesarios.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="icon">▲</div>
+                        <h3><span class="text">Next.js</span></h3>
+                        <p>React + servidor en uno. Usado por TikTok, Twitch, Hulu.</p>
+                    </div>
+                </div>
+                <div class="card mt-2 fade-up" style="border-color:var(--accent); text-align:center; padding: 16px;">
+                    <p style="font-size:0.9rem;">💡 Los frameworks van y vienen. Lo que dura son los <span class="bold">fundamentos de JavaScript</span>.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════ SLIDE 12: COSAS RARAS ═══════════ -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2 class="fade-up mb-2">Las <span class="accent">cosas raras</span> de JavaScript 🤯</h2>
+                <div class="two-col">
+                    <div class="fade-up">
+                        <pre><span class="cmt">// JavaScript tiene "bugs" históricos</span>
+<span class="cmt">// que nunca se corrigieron para no</span>
+<span class="cmt">// romper millones de páginas web</span>
+
+<span class="kw">typeof</span> <span class="kw">null</span>        <span class="cmt">// "object" 🤯</span>
+                     <span class="cmt">// (bug desde 1995)</span>
+
+NaN === NaN        <span class="cmt">// false</span>
+                     <span class="cmt">// (NaN no es igual a sí mismo)</span>
+
+<span class="num">0.1</span> + <span class="num">0.2</span>           <span class="cmt">// 0.30000000000000004</span>
+                     <span class="cmt">// (así funcionan los decimales</span>
+                     <span class="cmt">//  en binario, no es solo de JS)</span>
+
+[] == ![]          <span class="cmt">// true 🤯🤯🤯</span>
+
+<span class="str">'b'</span> + <span class="str">'a'</span> + + <span class="str">'a'</span> + <span class="str">'a'</span>
+                     <span class="cmt">// "baNaNa" 🍌</span><span class="label">💡 pruébalos</span></pre>
+                    </div>
+                    <div class="fade-up">
+                        <h3 class="mb-1">¿Por qué pasa esto?</h3>
+                        <ul style="font-size:0.88rem;">
+                            <li>JavaScript intenta <span class="bold">"adivinar"</span> qué querías hacer cuando mezclas tipos de datos</li>
+                            <li>A esto se le llama <span class="accent">coerción de tipos</span> — convierte automáticamente números a texto (y viceversa)</li>
+                            <li>Fue diseñado para ser "amigable" con principiantes... pero a veces se pasa 😅</li>
+                        </ul>
+
+                        <div class="card mt-2" style="border-color:var(--green); padding:16px;">
+                            <h3 style="font-size:0.9rem;">✅ La solución es simple:</h3>
+                            <ul style="font-size:0.82rem;">
+                                <li>Usar <code>===</code> en vez de <code>==</code> (comparación estricta)</li>
+                                <li>Usar <span class="bold">TypeScript</span> para que te avise de errores</li>
+                                <li>Estos quirks son divertidos pero <span class="bold">rara vez</span> te afectan en la vida real</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════ SLIDE 13: IA EN EL NAVEGADOR ═══════════ -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2 class="fade-up mb-2">El futuro: <span class="accent">inteligencia artificial</span> en tu navegador</h2>
+                <div class="two-col">
+                    <div class="fade-up">
+                        <p style="font-size:0.95rem; color:var(--text);">Hoy es posible ejecutar <span class="bold">modelos de IA</span> directamente en el navegador con JavaScript. Sin servidores. Tus datos <span class="green">nunca salen de tu computadora</span>.</p>
+                        <pre class="mt-2"><span class="cmt">// Analizar sentimiento de un texto</span>
+<span class="cmt">// La IA corre EN TU NAVEGADOR</span>
+<span class="kw">import</span> { pipeline } <span class="kw">from</span>
+  <span class="str">'@huggingface/transformers'</span>;
+
+<span class="kw">const</span> ia = <span class="kw">await</span> <span class="fn">pipeline</span>(
+  <span class="str">'sentiment-analysis'</span>
+);
+
+<span class="kw">const</span> r = <span class="kw">await</span> <span class="fn">ia</span>(<span class="str">'Me encanta JS!'</span>);
+<span class="cmt">// { label: 'POSITIVE', score: 0.99 }</span><span class="label">transformers.js</span></pre>
+                    </div>
+                    <div class="fade-up">
+                        <h3 class="mb-2">¿Cómo es posible?</h3>
+                        <div style="display:flex; flex-direction:column; gap:10px;">
+                            <div class="box" style="border-color:var(--accent);">🧠 Transformers.js <span class="dim">(librería de IA)</span></div>
+                            <div class="arrow">↓ usa</div>
+                            <div class="box" style="border-color:var(--cyan);">🎮 WebGPU <span class="dim">(acceso a tu tarjeta gráfica)</span></div>
+                            <div class="arrow">↓</div>
+                            <div class="box" style="border-color:var(--green);">💻 Tu GPU local</div>
+                        </div>
+                        <div class="card mt-2" style="border-color:var(--purple); padding:16px;">
+                            <p style="font-size:0.85rem;">También existe <span class="bold">WebAssembly (Wasm)</span>: permite correr código de C++ o Rust dentro del navegador a velocidad nativa. Figma, Google Earth y AutoCAD Web lo usan.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════ SLIDE 14: CONCLUSIONES ═══════════ -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2 class="fade-up mb-2">¿Por qué <span class="accent">aprender</span> JavaScript?</h2>
+                <div class="fade-up" style="max-width:750px; margin:0 auto;">
+                    <div class="reason-item">
+                        <div class="reason-num">01</div>
+                        <div><h3>Es el idioma de la web</h3><p>El <span class="bold">98.8%</span> de los sitios web lo usan. Es el único lenguaje nativo del navegador.</p></div>
+                    </div>
+                    <div class="reason-item">
+                        <div class="reason-num">02</div>
+                        <div><h3>Un lenguaje, todo el stack</h3><p>Frontend, backend, apps móviles, de escritorio, IoT, hasta <span class="bold">cohetes de SpaceX</span>.</p></div>
+                    </div>
+                    <div class="reason-item">
+                        <div class="reason-num">03</div>
+                        <div><h3>Altísima demanda laboral</h3><p>Es el lenguaje <span class="bold">más solicitado</span> en ofertas de empleo de tecnología a nivel mundial.</p></div>
+                    </div>
+                    <div class="reason-item">
+                        <div class="reason-num">04</div>
+                        <div><h3>Comunidad gigante</h3><p>2.5 millones de paquetes gratuitos, tutoriales infinitos, y la comunidad más activa.</p></div>
+                    </div>
+                    <div class="reason-item" style="border:none;">
+                        <div class="reason-num">05</div>
+                        <div><h3>No va a desaparecer</h3><p>Lleva 31 años evolucionando. Con IA y WebAssembly, su futuro es más fuerte que nunca.</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════ SLIDE 15: CIERRE ═══════════ -->
+        <div class="slide">
+            <div class="slide-content title-slide">
+                <div class="quote fade-up">
+                    "Un lenguaje creado en <span class="accent">10 días</span><br>que lleva <span class="accent">31 años</span> evolucionando."
+                </div>
+                <div class="js-logo fade-up" style="margin-top:40px;">JS</div>
+                <h2 class="fade-up">dudas,preguntas y sugerencias con la chica programadora <span class="dim"></span></h2>
+                <p class="team-info fade-up">Ingeniería en TI · 2026</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="slide-counter" id="counter">1 / 16</div>
+    <div class="key-hint">Usa <kbd>←</kbd> <kbd>→</kbd> o haz clic en las flechas</div>
+    <div class="nav">
+        <button onclick="prevSlide()" aria-label="Anterior">←</button>
+        <button onclick="nextSlide()" aria-label="Siguiente">→</button>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const progress = document.getElementById('progress');
+        const counter = document.getElementById('counter');
+        let current = 0;
+
+        function updateSlide(newIndex, direction = 'next') {
+            if (newIndex < 0 || newIndex >= slides.length) return;
+            const oldSlide = slides[current];
+            slides.forEach(s => s.classList.remove('active', 'prev'));
+            if (direction === 'next' && newIndex > current) oldSlide.classList.add('prev');
+            slides[newIndex].classList.add('active');
+            current = newIndex;
+            progress.style.width = ((current / (slides.length - 1)) * 100) + '%';
+            counter.textContent = `${current + 1} / ${slides.length}`;
+        }
+
+        function nextSlide() { updateSlide(current + 1, 'next'); }
+        function prevSlide() { updateSlide(current - 1, 'prev'); }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+            else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+            else if (e.key === 'Home') { e.preventDefault(); updateSlide(0, 'prev'); }
+            else if (e.key === 'End') { e.preventDefault(); updateSlide(slides.length - 1, 'next'); }
+        });
+
+        let touchStartX = 0;
+        document.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].clientX; }, { passive: true });
+        document.addEventListener('touchend', (e) => {
+            const diff = touchStartX - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > 50) { diff > 0 ? nextSlide() : prevSlide(); }
+        }, { passive: true });
+
+        updateSlide(0);
+    </script>
+</body>
+</html>
