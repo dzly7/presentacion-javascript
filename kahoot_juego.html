@@ -34,7 +34,6 @@
             overflow-x: hidden;
         }
 
-        /* Container */
         .game-container {
             width: 100%;
             max-width: 960px;
@@ -45,7 +44,6 @@
             position: relative;
         }
 
-        /* Start Screen */
         .start-screen {
             text-align: center;
             background: rgba(255, 255, 255, 0.1);
@@ -94,7 +92,6 @@
             background: #f7df1e;
         }
 
-        /* Top Bar */
         .top-bar {
             width: 100%;
             display: flex;
@@ -119,7 +116,6 @@
             font-weight: 900;
         }
 
-        /* Question Box */
         .question-card {
             background: #ffffff;
             color: #222222;
@@ -142,7 +138,6 @@
             line-height: 1.4;
         }
 
-        /* Timer Bar */
         .timer-container {
             width: 100%;
             height: 10px;
@@ -159,7 +154,6 @@
             transition: width 1s linear;
         }
 
-        /* Answer Grid */
         .answers-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -208,7 +202,6 @@
             justify-content: center;
         }
 
-        /* Feedback Screen */
         .feedback-modal {
             position: fixed;
             inset: 0;
@@ -261,7 +254,6 @@
         }
         .btn-next:hover { transform: scale(1.05); }
 
-        /* End Screen */
         .end-card {
             background: rgba(255,255,255,0.12);
             backdrop-filter: blur(10px);
@@ -288,15 +280,13 @@
 
     <div class="game-container">
 
-        <!-- START SCREEN -->
         <div class="start-screen" id="startScreen">
             <div class="kahoot-logo">Kahoot! <span>JS</span></div>
             <div class="start-title">JavaScript: De Juguete a Imperio</div>
-            <p style="margin-bottom: 30px; opacity:0.8;">10 preguntas de nivel medio para poner a prueba a la clase</p>
+            <p style="margin-bottom: 30px; opacity:0.8;">10 preguntas conceptuales para poner a prueba a la clase</p>
             <button class="btn-start" onclick="startGame()">¡EMPEZAR!</button>
         </div>
 
-        <!-- GAMEPLAY SCREEN -->
         <div id="gameScreen" class="hidden" style="width: 100%;">
             <div class="top-bar">
                 <div class="badge-q" id="qBadge">Pregunta 1 / 10</div>
@@ -331,7 +321,6 @@
             </div>
         </div>
 
-        <!-- END SCREEN -->
         <div id="endScreen" class="end-card hidden">
             <div class="kahoot-logo">¡FIN DEL JUEGO!</div>
             <p style="font-size: 1.2rem;">Puntuación Final:</p>
@@ -342,7 +331,6 @@
 
     </div>
 
-    <!-- FEEDBACK MODAL -->
     <div class="feedback-modal" id="feedbackModal">
         <div class="feedback-title" id="fbTitle">¡Correcto! 🎉</div>
         <div class="feedback-explanation" id="fbExp">Explicación aquí</div>
@@ -364,52 +352,52 @@
                 exp: "💡 Fue puramente marketing en 1995 para aprovechar la fama de Java. Tienen tanto en común como 'car' y 'carpet'."
             },
             {
-                q: "¿Cómo funciona JavaScript para ejecutar código siendo Single-Threaded (un solo hilo)?",
+                q: "¿Cómo se complementan HTML, CSS y JavaScript en una página web?",
+                opts: ["HTML estilos, CSS estructura, JS base de datos", "HTML estructura, CSS apariencia, JS interactividad", "Los tres hacen exactamente lo mismo", "JS solo sirve para diseñar logos"],
+                correct: 1,
+                exp: "💡 HTML es la estructura (paredes), CSS es el diseño/apariencia (pintura) y JavaScript es la interactividad (electricidad)."
+            },
+            {
+                q: "¿Cómo funciona JavaScript para ejecutar tareas siendo Single-Threaded (un solo hilo)?",
                 opts: ["Crea miles de hilos", "Hace una cosa a la vez pero delega tareas lentas", "Se congela totalmente", "Duplica la memoria RAM"],
                 correct: 1,
                 exp: "💡 Como un chef en una estufa: pone el agua a hervir (delega al navegador) y mientras tanto pica verduras."
             },
             {
-                q: "En este código: console.log('A'); setTimeout(()=>console.log('B'),0); console.log('C'); ¿En qué orden sale?",
-                opts: ["A, B, C", "A, C, B", "B, A, C", "C, B, A"],
-                correct: 1,
-                exp: "💡 setTimeout delega la tarea a la cola. El Event Loop procesa primero todo el código síncrono (A y C) y al final B."
-            },
-            {
                 q: "¿Qué es el DOM en el contexto del desarrollo web?",
-                opts: ["El servidor de la BD", "Sustituto de HTML", "La representación en memoria modificable por JS", "Motor gráfico de Chrome"],
+                opts: ["El servidor de BD", "Sustituto de HTML", "La representación en memoria modificable por JS", "Motor gráfico de Chrome"],
                 correct: 2,
-                exp: "💡 El DOM (Document Object Model) es el árbol de objetos en memoria que JS modifica en tiempo real para cambiar la página."
+                exp: "💡 DOM (Document Object Model) es el árbol de objetos en memoria. Permite a JS cambiar textos, colores y estilos en tiempo real."
             },
             {
-                q: "¿Qué hace la palabra clave 'await' en: const res = await fetch(url)?",
-                opts: ["Congela la compu", "Cancela la petición", "Espera la respuesta sin congelar la página", "Traduce a C++"],
-                correct: 2,
-                exp: "💡 'await' espera los datos del servidor de forma asíncrona sin bloquear la interfaz ni la experiencia del usuario."
+                q: "¿Qué significa que JavaScript sea un lenguaje 'Full-Stack'?",
+                opts: ["Solo sirve para PC de escritorio", "Se usa tanto en el navegador (cliente) como en el servidor", "Solo procesa texto en Word", "Requiere internet de alta velocidad"],
+                correct: 1,
+                exp: "💡 Con Node.js, JavaScript permite desarrollar tanto la interfaz web (frontend) como el servidor (backend) con el mismo lenguaje."
             },
             {
                 q: "¿Qué logro principal tuvo Node.js al salir en 2009?",
                 opts: ["Sitios 100% gratis", "Ejecutar JS en servidores fuera del navegador", "Reemplazar HTML y CSS", "Eliminar las BD"],
                 correct: 1,
-                exp: "💡 Ryan Dahl tomó el motor V8 de Chrome y creó Node.js, permitiendo usar JavaScript en servidores por primera vez."
+                exp: "💡 Creado por Ryan Dahl al extraer el motor V8 de Chrome, permitió usar JavaScript tanto en frontend como en backend."
             },
             {
-                q: "¿Por qué muchos desarrolladores prefieren TypeScript en lugar de JavaScript puro?",
-                opts: ["Corre 100x más rápido", "Detecta errores en el editor ANTES de ejecutar", "No requiere aprender JS", "Elimina las pruebas"],
+                q: "¿Cuál de los siguientes es un framework o librería popular de JavaScript?",
+                opts: ["Python", "React", "Photoshop", "Windows 11"],
                 correct: 1,
-                exp: "💡 TypeScript agrega tipos estáticos que te marcan errores en rojo en tu editor antes de publicar el código a producción."
+                exp: "💡 React es la librería más popular de JavaScript creada por Meta para construir interfaces web modernas por componentes."
             },
             {
-                q: "En JavaScript ¿cuál es el resultado de ejecutar typeof null?",
-                opts: ["'null'", "'undefined'", "'object'", "'number'"],
-                correct: 2,
-                exp: "💡 ¡Un bug histórico de 1995! 'null' tenía el tag de bits 000 igual que los objetos, y se mantuvo por retrocompatibilidad."
+                q: "¿Por qué muchos desarrolladores prefieren usar TypeScript en lugar de JavaScript puro?",
+                opts: ["Corre 100x más rápido", "Detecta errores de tipo en el editor ANTES de ejecutar", "No requiere aprender JS", "Elimina las pruebas"],
+                correct: 1,
+                exp: "💡 TypeScript agrega un sistema de tipos estáticos que te avisa si cometiste un error de datos mientras estás escribiendo código."
             },
             {
-                q: "¿Qué tecnología permite ejecutar modelos de IA localmente usando la GPU en el navegador?",
+                q: "¿Qué tecnología moderna permite ejecutar modelos de IA localmente en el navegador usando la GPU?",
                 opts: ["Node.js", "WebGPU + Transformers.js", "jQuery", "AJAX"],
                 correct: 1,
-                exp: "💡 WebGPU da acceso a la tarjeta gráfica directamente desde JS para correr inteligencia artificial localmente sin servidor."
+                exp: "💡 WebGPU le da acceso directo a JavaScript a la tarjeta gráfica (GPU) local del usuario para procesar IA sin enviar datos a un servidor."
             }
         ];
 
@@ -437,7 +425,6 @@
                 document.getElementById(`opt${i}`).textContent = q.opts[i];
             }
 
-            // Reset Timer
             timeLeft = 20;
             const timerFill = document.getElementById('timerFill');
             timerFill.style.transition = 'none';
@@ -450,7 +437,7 @@
 
             clearInterval(timer);
             timer = setTimeout(() => {
-                checkAnswer(-1); // Time out
+                checkAnswer(-1);
             }, 20000);
         }
 
@@ -495,7 +482,7 @@
             document.getElementById('finalScore').textContent = `${score} pts`;
 
             let msg = "";
-            if (score >= 9000) msg = "🏆 ¡Excelente! Dominas JavaScript a nivel senior.";
+            if (score >= 9000) msg = "🏆 ¡Excelente! Dominas los conceptos de JavaScript.";
             else if (score >= 6000) msg = "👏 ¡Muy bien! Tienes bases sólidas del lenguaje.";
             else msg = "📚 ¡Buen intento! Repasa la presentación para el examen.";
             document.getElementById('finalMsg').textContent = msg;

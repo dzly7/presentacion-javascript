@@ -1,0 +1,38 @@
+import openpyxl
+
+wb = openpyxl.Workbook()
+ws = wb.active
+ws.title = "Kahoot"
+
+headers = [
+    "Question",
+    "Answer 1",
+    "Answer 2",
+    "Answer 3",
+    "Answer 4",
+    "Time limit (sec)",
+    "Correct answer(s)"
+]
+
+ws.append(headers)
+
+# 10 Preguntas puramente conceptuales (sin sintaxis de código)
+rows = [
+    ["¿En cuantos dias creo Brendan Eich la primera version de JavaScript en 1995?", "30 dias", "10 dias", "1 ano", "100 dias", 20, "2"],
+    ["¿Por que el lenguaje se llamo 'JavaScript' si no tiene relacion con Java?", "Creadores iguales", "Copia de codigo", "Estrategia de marketing", "Error de imprenta", 20, "3"],
+    ["¿Como se complementan HTML, CSS y JavaScript en una pagina web?", "HTML estilos, CSS estructura, JS base de datos", "HTML estructura, CSS apariencia, JS interactividad", "Los tres hacen exactamente lo mismo", "JS solo sirve para diseñar logos", 20, "2"],
+    ["¿Como funciona JavaScript para ejecutar tareas siendo de un solo hilo (single-threaded)?", "Crea miles de hilos", "Hace una cosa a la vez pero delega tareas lentas", "Se congela totalmente", "Duplica la memoria RAM", 20, "2"],
+    ["¿Que es el DOM en el desarrollo web?", "El servidor de base de datos", "Sustituto de HTML", "Representacion en memoria modificable por JS", "Motor grafico de Chrome", 20, "3"],
+    ["¿Que significa que JavaScript sea un lenguaje 'Full-Stack'?", "Solo sirve para computadoras de escritorio", "Se usa tanto en el navegador (cliente) como en el servidor", "Solo procesa texto en Word", "Requiere internet de alta velocidad", 20, "2"],
+    ["¿Que logro principal tuvo Node.js al salir en 2009?", "Sitios 100% gratis", "Ejecutar JS en servidores fuera del navegador", "Reemplazar HTML y CSS", "Eliminar bases de datos", 20, "2"],
+    ["¿Cual de los siguientes es un framework o libreria popular de JavaScript?", "Python", "React", "Photoshop", "Windows 11", 20, "2"],
+    ["¿Por que muchos desarrolladores prefieren TypeScript en lugar de JS puro?", "Corre 100x mas rapido", "Detecta errores en el editor ANTES de ejecutar", "No requiere aprender JS", "Elimina las pruebas", 20, "2"],
+    ["¿Que tecnologia permite ejecutar modelos de IA localmente con la GPU en el navegador?", "Node.js", "WebGPU + Transformers.js", "jQuery", "AJAX", 20, "2"]
+]
+
+for row in rows:
+    ws.append(row)
+
+output_xlsx = r"c:\Users\sanch\Documents\PROFE JUAN\kahoot_import.xlsx"
+wb.save(output_xlsx)
+print("Excel actualizado exitosamente.")
