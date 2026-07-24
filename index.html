@@ -508,7 +508,7 @@ boton.<span class="fn">addEventListener</span>(<span class="str">'click'</span>,
             </div>
         </div>
 
-        <!-- ═══════════ SLIDE 2: ORIGEN ═══════════ -->
+        <!-- ═══════════ SLIDE 2: ORIGEN Y LÍNEA DEL TIEMPO ═══════════ -->
         <div class="slide">
             <div class="slide-content">
                 <h2 class="fade-up mb-2">La historia: de <span class="accent">10 días</span> a dominar el mundo</h2>
@@ -542,7 +542,290 @@ boton.<span class="fn">addEventListener</span>(<span class="str">'click'</span>,
             </div>
         </div>
 
-        <!-- ═══════════ SLIDE 3: DÓNDE ESTÁ JS ═══════════ -->
+        <!-- ═══════════ SLIDE 3: SINTAXIS Y PALABRAS CLAVE (TABLA ESTILO CHEAT SHEET) ═══════════ -->
+        <div class="slide">
+            <div class="slide-content" style="max-width: 1200px;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                    <div>
+                        <h2 style="font-size: 1.7rem; font-weight: 900; color: var(--accent); line-height: 1.1;">
+                            PALABRAS CLAVE Y SINTAXIS EN JAVASCRIPT
+                        </h2>
+                        <div style="display: inline-block; background: var(--accent); color: #000; font-weight: 800; font-size: 0.7rem; padding: 3px 12px; border-radius: 20px; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.05em;">
+                            LOS 8 PILARES FUNDAMENTALES DE JS
+                        </div>
+                    </div>
+                    <div style="background: var(--bg-card); border-left: 4px solid var(--accent); padding: 8px 14px; border-radius: 8px; max-width: 460px; font-size: 0.75rem; color: var(--text-dim);">
+                        Las palabras clave y métodos en JavaScript permiten manipular la estructura, capturar la interacción del usuario y controlar el comportamiento dinámico.
+                    </div>
+                </div>
+
+                <div style="overflow-x: auto; background: var(--bg-card); border: 1px solid #30363d; border-radius: 12px; max-height: 520px;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.75rem;">
+                        <thead>
+                            <tr style="background: rgba(247, 223, 30, 0.1); border-bottom: 2px solid var(--accent); position: sticky; top: 0; background: #161b22; z-index: 2;">
+                                <th style="padding: 8px 10px; color: var(--accent); width: 16%;">SINTAXIS / MÉTODO</th>
+                                <th style="padding: 8px 10px; color: var(--accent); width: 25%;">DESCRIPCIÓN</th>
+                                <th style="padding: 8px 10px; color: var(--accent); width: 21%;">¿CUÁNDO SE USA?</th>
+                                <th style="padding: 8px 10px; color: var(--accent); width: 23%;">EJEMPLO DE CÓDIGO</th>
+                                <th style="padding: 8px 10px; color: var(--accent); width: 15%;">RESULTADO VISUAL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d;">
+                                    <span class="bold accent" style="font-size: 0.85rem;">const / let</span><br>
+                                    <span class="dim" style="font-size: 0.68rem;">Declaración de variable</span>
+                                </td>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d; color: var(--text-dim);">
+                                    Guarda datos en la memoria de la compu. <code style="color:var(--accent);">const</code> es constante, <code style="color:var(--cyan);">let</code> se puede modificar.
+                                </td>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d; color: var(--text-dim);">
+                                    Para almacenar nombres, números, listas, contadores o elementos seleccionados.
+                                </td>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d;">
+                                    <pre style="padding: 6px 8px; font-size: 0.68rem; margin: 0;"><span class="kw">const</span> usuario = <span class="str">'Ana'</span>;
+<span class="kw">let</span> puntos = <span class="num">100</span>;</pre>
+                                </td>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d; text-align: center;">
+                                    <div style="background: #21262d; border: 1px solid var(--accent); color: var(--accent); padding: 4px 8px; border-radius: 6px; font-family: var(--mono); font-size: 0.68rem; display: inline-block;">
+                                        Ana • 100 pts
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d;">
+                                    <span class="bold cyan" style="font-size: 0.85rem;">function / () => {}</span><br>
+                                    <span class="dim" style="font-size: 0.68rem;">Funciones / Arrow</span>
+                                </td>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d; color: var(--text-dim);">
+                                    Bloque de código reutilizable que ejecuta una tarea específica al ser invocado.
+                                </td>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d; color: var(--text-dim);">
+                                    Para evitar repetir código y organizar las operaciones lógicas de la app.
+                                </td>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d;">
+                                    <pre style="padding: 6px 8px; font-size: 0.68rem; margin: 0;"><span class="kw">const</span> sumar = (a, b) <span class="op">=></span> a + b;
+<span class="fn">sumar</span>(<span class="num">5</span>, <span class="num">3</span>);</pre>
+                                </td>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d; text-align: center;">
+                                    <div style="background: rgba(88,166,255,0.15); border: 1px solid var(--cyan); color: var(--cyan); padding: 4px 8px; border-radius: 6px; font-family: var(--mono); font-size: 0.68rem; display: inline-block;">
+                                        Resultado ➔ 8
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d;">
+                                    <span class="bold red" style="font-size: 0.85rem;">if / else</span><br>
+                                    <span class="dim" style="font-size: 0.68rem;">Control condicional</span>
+                                </td>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d; color: var(--text-dim);">
+                                    Evalúa una condición verdadera o falsa para decidir qué camino tomar.
+                                </td>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d; color: var(--text-dim);">
+                                    Para validaciones de login, comprobar edades o mostrar/ocultar menús.
+                                </td>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d;">
+                                    <pre style="padding: 6px 8px; font-size: 0.68rem; margin: 0;"><span class="kw">if</span> (edad >= <span class="num">18</span>) {
+  <span class="fn">permitirAcceso</span>();
+}</pre>
+                                </td>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d; text-align: center;">
+                                    <div style="background: rgba(63,185,80,0.15); border: 1px solid var(--green); color: var(--green); padding: 4px 8px; border-radius: 6px; font-size: 0.68rem; display: inline-block;">
+                                        Acceso Permitido 🔓
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d;">
+                                    <span class="bold cyan" style="font-size: 0.85rem;">querySelector()</span><br>
+                                    <span class="dim" style="font-size: 0.68rem;">Seleccionador DOM</span>
+                                </td>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d; color: var(--text-dim);">
+                                    Busca y captura un elemento del HTML usando un selector de ID (<code style="color:var(--cyan);">#id</code>) o clase (<code style="color:var(--purple);">.clase</code>).
+                                </td>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d; color: var(--text-dim);">
+                                    Para tomar un botón, formulario o texto de la página y poder modificarlo.
+                                </td>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d;">
+                                    <pre style="padding: 6px 8px; font-size: 0.68rem; margin: 0;"><span class="kw">const</span> btn = document.
+  <span class="fn">querySelector</span>(<span class="str">'#btn'</span>);</pre>
+                                </td>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d; text-align: center;">
+                                    <button style="background: var(--bg-card); border: 1px solid var(--cyan); color: var(--cyan); padding: 4px 10px; border-radius: 6px; font-size: 0.68rem; cursor: pointer; font-weight: bold;">
+                                        ⚡ [Botón Capturado]
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d;">
+                                    <span class="bold orange" style="font-size: 0.85rem;">addEventListener()</span><br>
+                                    <span class="dim" style="font-size: 0.68rem;">Escuchador de evento</span>
+                                </td>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d; color: var(--text-dim);">
+                                    Escucha una acción del usuario (clic, tecla, scroll) y ejecuta código al detectarla.
+                                </td>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d; color: var(--text-dim);">
+                                    Para hacer que la página responda cuando el usuario interactúa.
+                                </td>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d;">
+                                    <pre style="padding: 6px 8px; font-size: 0.68rem; margin: 0;">btn.<span class="fn">addEventListener</span>(
+  <span class="str">'click'</span>, () <span class="op">=></span> <span class="fn">alert</span>(<span class="str">'¡Hola!'</span>));</pre>
+                                </td>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d; text-align: center;">
+                                    <div style="background: var(--orange); color: #000; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 0.68rem; display: inline-block;">
+                                        Clic ➔ [Ventana Alerta 👋]
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d;">
+                                    <span class="bold green" style="font-size: 0.85rem;">async / await</span><br>
+                                    <span class="dim" style="font-size: 0.68rem;">Petición asíncrona</span>
+                                </td>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d; color: var(--text-dim);">
+                                    Pide datos a un servidor o API y espera la respuesta sin congelar la página.
+                                </td>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d; color: var(--text-dim);">
+                                    Para consultar bases de datos, APIs de clima, usuarios o notificaciones.
+                                </td>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d;">
+                                    <pre style="padding: 6px 8px; font-size: 0.68rem; margin: 0;"><span class="kw">const</span> res = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">'/api'</span>);
+<span class="kw">const</span> datos = <span class="kw">await</span> res.<span class="fn">json</span>();</pre>
+                                </td>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d; text-align: center;">
+                                    <div style="background: rgba(63,185,80,0.15); border: 1px solid var(--green); color: var(--green); padding: 4px 8px; border-radius: 6px; font-size: 0.68rem; display: inline-block;">
+                                        Datos recibidos ✅
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d;">
+                                    <span class="bold purple" style="font-size: 0.85rem;">textContent / style</span><br>
+                                    <span class="dim" style="font-size: 0.68rem;">Modificador DOM</span>
+                                </td>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d; color: var(--text-dim);">
+                                    Cambia el texto interno o aplica estilos CSS a cualquier elemento de la pantalla.
+                                </td>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d; color: var(--text-dim);">
+                                    Para actualizar mensajes de éxito, cambiar colores de estado o notificaciones.
+                                </td>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d;">
+                                    <pre style="padding: 6px 8px; font-size: 0.68rem; margin: 0;">el.textContent = <span class="str">'¡Éxito!'</span>;
+el.style.color = <span class="str">'#3FB950'</span>;</pre>
+                                </td>
+                                <td style="padding: 10px 12px; border-bottom: 1px solid #21262d; text-align: center;">
+                                    <span style="color: var(--green); font-weight: bold; font-size: 0.85rem; border: 1px solid var(--green); padding: 3px 8px; border-radius: 4px;">¡Éxito!</span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding: 10px 12px;">
+                                    <span class="bold yellow" style="font-size: 0.85rem;">Array.map()</span><br>
+                                    <span class="dim" style="font-size: 0.68rem;">Iterador de listas</span>
+                                </td>
+                                <td style="padding: 10px 12px; color: var(--text-dim);">
+                                    Recorre una lista de elementos y transforma cada uno generando una nueva lista.
+                                </td>
+                                <td style="padding: 10px 12px; color: var(--text-dim);">
+                                    Para mostrar listas de productos, tarjetas de usuarios o feeds de noticias.
+                                </td>
+                                <td style="padding: 10px 12px;">
+                                    <pre style="padding: 6px 8px; font-size: 0.68rem; margin: 0;">items.<span class="fn">map</span>(i <span class="op">=></span> <span class="str">`&lt;li&gt;${i}&lt;/li&gt;`</span>);</pre>
+                                </td>
+                                <td style="padding: 10px 12px; text-align: center;">
+                                    <div style="background: #21262d; border: 1px solid var(--accent); color: var(--text); padding: 4px 8px; border-radius: 6px; font-size: 0.65rem; text-align: left; display: inline-block;">
+                                        • Elemento 1<br>• Elemento 2
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════ SLIDE 4: PROFUNDIZANDO EN FUNCIONES ═══════════ -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2 class="fade-up mb-2">Profundizando en las <span class="accent">Funciones</span> en JS</h2>
+                <p class="fade-up dim mb-2" style="text-align:center;">Las funciones son bloques de código reutilizables. JS permite desde funciones tradicionales hasta Arrow Functions modernas.</p>
+                <div class="two-col fade-up">
+                    <div>
+                        <div class="card mb-2" style="padding:16px 20px;">
+                            <h3 class="cyan">1. Función Tradicional (`function`)</h3>
+                            <pre style="font-size:0.75rem; margin-top:8px;"><span class="kw">function</span> <span class="fn">calcularTotal</span>(precio, IVA = <span class="num">0.16</span>) {
+  <span class="kw">return</span> precio + (precio * IVA);
+}</pre>
+                            <p style="font-size:0.8rem; margin-top:6px; color:var(--text-dim);">Usa la palabra clave <code>function</code>, recibe parámetros y regresa un resultado con <code>return</code>.</p>
+                        </div>
+                        <div class="card" style="padding:16px 20px;">
+                            <h3 class="accent">2. Arrow Functions (`() => {}` - ES6)</h3>
+                            <pre style="font-size:0.75rem; margin-top:8px;"><span class="kw">const</span> multiplicar = (a, b) <span class="op">=></span> a * b;
+<span class="kw">const</span> saludar = nombre <span class="op">=></span> <span class="str">`Hola ${nombre}`</span>;</pre>
+                            <p style="font-size:0.8rem; margin-top:6px; color:var(--text-dim);">Sintaxis moderna introducida en 2015. Más concisa y con retorno implícito en una sola línea.</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="card mb-2" style="padding:16px 20px;">
+                            <h3 class="orange">3. Callbacks y Funciones Anónimas</h3>
+                            <pre style="font-size:0.75rem; margin-top:8px;">boton.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="kw">function</span>() {
+  <span class="kw">console</span>.<span class="fn">log</span>(<span class="str">'¡Ejecutado al hacer clic!'</span>);
+});</pre>
+                            <p style="font-size:0.8rem; margin-top:6px; color:var(--text-dim);">Una función enviada como argumento a otra función para ejecutarse cuando ocurra un evento.</p>
+                        </div>
+                        <div class="card" style="padding:16px 20px; border-color:var(--green);">
+                            <h3 class="green">💡 ¿Por qué son tan importantes?</h3>
+                            <ul style="font-size:0.8rem; color:var(--text-dim);">
+                                <li>Evitan tener que escribir el mismo código varias veces.</li>
+                                <li>Permiten aislar la lógica y modularizar la aplicación.</li>
+                                <li>Son la base de los eventos y la programación asíncrona.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════ SLIDE 5: LIBRERÍAS Y PAQUETES (NPM) ═══════════ -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2 class="fade-up mb-2">Librerías Populares del <span class="accent">Ecosistema npm</span></h2>
+                <p class="fade-up dim mb-2" style="text-align:center;">Gracias al gestor de paquetes npm, puedes agregar librerías listas para resolver cualquier necesidad.</p>
+                <div class="four-col fade-up">
+                    <div class="card icon-card">
+                        <div class="icon">📊</div>
+                        <h3><span class="cyan">Chart.js</span></h3>
+                        <p><span class="bold">Gráficas Interactivas:</span> Crea gráficas de barras, líneas y pH en tiempo real (usado en AquaSierra).</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="icon">🌐</div>
+                        <h3><span class="green">Axios</span></h3>
+                        <p><span class="bold">Cliente HTTP:</span> Simplifica las peticiones `fetch` a servidores y APIs con manejo automático de datos JSON.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="icon">🛠️</div>
+                        <h3><span class="orange">Lodash</span></h3>
+                        <p><span class="bold">Utilidades de Datos:</span> Funciones optimizadas para manipular listas, objetos, clonar y filtrar información.</p>
+                    </div>
+                    <div class="card icon-card">
+                        <div class="icon">🔔</div>
+                        <h3><span class="purple">SweetAlert2</span></h3>
+                        <p><span class="bold">Notificaciones UI:</span> Reemplaza el `alert()` feo del navegador con ventanas emergentes elegantes y animadas.</p>
+                    </div>
+                </div>
+                <div class="card mt-2 fade-up" style="border-color:var(--accent); text-align:center; padding: 14px;">
+                    <p style="font-size:0.88rem;">📦 En npm existen más de <span class="bold accent">2.5 millones de librerías gratuitas</span> creadas por la comunidad.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════ SLIDE 6: DÓNDE ESTÁ JS ═══════════ -->
         <div class="slide">
             <div class="slide-content">
                 <h2 class="fade-up mb-2">Apps que usas <span class="accent">todos los días</span> hechas con JS</h2>
